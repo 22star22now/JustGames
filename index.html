@@ -2,197 +2,104 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Just Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-    
-    /* Background gradient animation */
     body {
       margin: 0;
       font-family: 'Press Start 2P', monospace;
-      background: linear-gradient(270deg, #ff6ec4, #7873f5, #4fd1c5, #ffc857, #ff6ec4);
-      background-size: 1000% 1000%;
-      animation: gradientShift 30s ease infinite;
-      color: #ffffff;
+      background-color: #000;
+      color: #fff;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Circular Banner */
     .banner {
-      padding: 20px 40px;
+      padding: 40px 60px;
       text-align: center;
-      font-size: 2.5rem;
+      font-size: 3rem;
       color: #ffffff;
-      background-color: rgba(0, 0, 0, 0.7);
-      text-shadow: 3px 3px #ff00ff;
-      border-radius: 50px;
-      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
-      margin-top: 50px;
-      width: fit-content;
-      transition: all 0.3s ease;
-    }
-
-    .banner:hover {
-      transform: scale(1.1);
-    }
-
-    .content {
-      padding: 20px;
-      text-align: center;
-      max-width: 1400px;
-      margin: auto;
+      background-color: rgba(0, 0, 0, 0.8);
+      text-shadow: 2px 2px #00FF00;
+      border-radius: 40px;
+      box-shadow: 0px 10px 20px rgba(0, 255, 0, 0.5);
+      margin-top: 60px;
+      margin-bottom: 40px;
     }
 
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
       padding: 20px;
+      justify-items: center;
+      width: 100%;
+      max-width: 1200px;
     }
 
-    /* Game card style with 3D hover effect */
     .game-card {
-      background-color: rgba(0, 0, 0, 0.6);
-      border: 2px solid #ff00ff;
-      border-radius: 10px;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 20px;
       text-align: center;
       cursor: pointer;
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      position: relative;
       overflow: hidden;
     }
 
     .game-card:hover {
-      transform: translateY(-10px) scale(1.05);
-      box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+      transform: perspective(600px) rotateX(10deg) rotateY(5deg) scale(1.1);
+      box-shadow: 0 15px 40px rgba(0, 255, 0, 0.8);
     }
 
     .game-card img {
       width: 100%;
       height: 150px;
       object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-
-    .game-card:hover img {
-      transform: scale(1.1);
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
     }
 
     .game-title {
       padding: 10px;
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: #ffffff;
-      background-color: #222;
-      border-top: 2px solid #ff00ff;
+      background-color: #111;
+      border-radius: 0 0 20px 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .content p {
-      font-size: 1.2rem;
-      color: #ffffff;
-    }
-
-    /* Smooth scrolling for the page */
     html {
       scroll-behavior: smooth;
     }
-
-    /* Footer style for more polish */
-    footer {
-      margin-top: 50px;
-      text-align: center;
-      color: #fff;
-      font-size: 1rem;
-    }
-
   </style>
 </head>
 <body>
-  <div class="banner">
-    JUST GAMES
-  </div>
+  <div class="banner">JUST GAMES</div>
 
-  <div class="content">
-    <p>Click on any game below to start playing:</p>
-    <div class="games-grid" id="games-container"></div>
-  </div>
-
-  <footer>
-    <p>Enjoy our collection of browser-based games!</p>
-  </footer>
+  <div class="games-grid" id="games-container"></div>
 
   <script>
     const games = [
-      {
-        name: "Flappy Bird",
-        image: "https://i.imgur.com/6QZ5PpB.png",
-        link: "https://flappybird.io/"
-      },
-      {
-        name: "2048",
-        image: "https://i.imgur.com/O9p8H1d.png",
-        link: "https://play2048.co/"
-      },
-      {
-        name: "T-Rex Runner",
-        image: "https://i.imgur.com/kjvLS2T.png",
-        link: "https://t-rex-game.github.io/"
-      },
-      {
-        name: "Snake",
-        image: "https://i.imgur.com/w1QlSzi.png",
-        link: "https://playsnake.org/"
-      },
-      {
-        name: "Minesweeper",
-        image: "https://i.imgur.com/xZrgrc3.png",
-        link: "https://minesweeper.online/"
-      },
-      {
-        name: "Pacman",
-        image: "https://i.imgur.com/HFqkFlt.png",
-        link: "https://www.google.com/logos/2010/pacman10-i.html"
-      },
-      {
-        name: "Basketball Stars",
-        image: "https://i.imgur.com/Jgfj5FH.png",
-        link: "https://basketballstarsgame.com"
-      },
-      {
-        name: "Superhot",
-        image: "https://i.imgur.com/l0jf3To.png",
-        link: "https://superhot.io"
-      },
-      {
-        name: "Krunker.io",
-        image: "https://i.imgur.com/izYtZzz.png",
-        link: "https://krunker.io"
-      },
-      {
-        name: "Agar.io",
-        image: "https://i.imgur.com/nZmjvKx.png",
-        link: "https://agar.io"
-      },
-      {
-        name: "Shell Shockers",
-        image: "https://i.imgur.com/dFyNE8g.png",
-        link: "https://shellshock.io"
-      },
-      {
-        name: "Wormax.io",
-        image: "https://i.imgur.com/MVxOa1r.png",
-        link: "https://wormax.io"
-      }
+      { name: "Flappy Bird", image: "https://i.imgur.com/6QZ5PpB.png", link: "https://flappybird.io/" },
+      { name: "2048", image: "https://i.imgur.com/O9p8H1d.png", link: "https://play2048.co/" },
+      { name: "T-Rex Runner", image: "https://i.imgur.com/kjvLS2T.png", link: "https://t-rex-game.github.io/" },
+      { name: "Snake", image: "https://i.imgur.com/w1QlSzi.png", link: "https://playsnake.org/" },
+      { name: "Minesweeper", image: "https://i.imgur.com/xZrgrc3.png", link: "https://minesweeper.online/" },
+      { name: "Pacman", image: "https://i.imgur.com/HFqkFlt.png", link: "https://www.google.com/logos/2010/pacman10-i.html" },
+      { name: "Basketball Stars", image: "https://i.imgur.com/Jgfj5FH.png", link: "https://basketballstarsgame.com" },
+      { name: "Superhot", image: "https://i.imgur.com/l0jf3To.png", link: "https://superhot.io" },
+      { name: "Krunker.io", image: "https://i.imgur.com/izYtZzz.png", link: "https://krunker.io" },
+      { name: "Agar.io", image: "https://i.imgur.com/nZmjvKx.png", link: "https://agar.io" },
+      { name: "Shell Shockers", image: "https://i.imgur.com/dFyNE8g.png", link: "https://shellshock.io" },
+      { name: "Wormax.io", image: "https://i.imgur.com/MVxOa1r.png", link: "https://wormax.io" }
     ];
 
     const container = document.getElementById("games-container");
@@ -200,9 +107,7 @@
     games.forEach(game => {
       const card = document.createElement("div");
       card.className = "game-card";
-      card.onclick = () => {
-        window.location.href = game.link;
-      };
+      card.onclick = () => window.location.href = game.link;
 
       const img = document.createElement("img");
       img.src = game.image;
@@ -218,4 +123,3 @@
   </script>
 </body>
 </html>
-
