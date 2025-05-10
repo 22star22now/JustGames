@@ -6,29 +6,45 @@
   <title>Just Games</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
+    
+    /* Background gradient animation */
     body {
       margin: 0;
       font-family: 'Press Start 2P', monospace;
-      background-color: #000;
+      background: linear-gradient(270deg, #ff6ec4, #7873f5, #4fd1c5, #ffc857, #ff6ec4);
+      background-size: 1000% 1000%;
+      animation: gradientShift 30s ease infinite;
       color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    @keyframes bannerShift {
-      0% { background-color: #ff6ec4; }
-      25% { background-color: #7873f5; }
-      50% { background-color: #4fd1c5; }
-      75% { background-color: #ffc857; }
-      100% { background-color: #ff6ec4; }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
+    /* Circular Banner */
     .banner {
-      padding: 30px 0;
+      padding: 20px 40px;
       text-align: center;
-      font-size: 2rem;
+      font-size: 2.5rem;
       color: #ffffff;
-      animation: bannerShift 20s ease infinite;
-      text-shadow: 2px 2px #000000;
+      background-color: rgba(0, 0, 0, 0.7);
+      text-shadow: 3px 3px #ff00ff;
+      border-radius: 50px;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+      margin-top: 50px;
+      width: fit-content;
+      transition: all 0.3s ease;
+    }
+
+    .banner:hover {
+      transform: scale(1.1);
     }
 
     .content {
@@ -41,38 +57,64 @@
     .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
+      gap: 30px;
       padding: 20px;
     }
 
+    /* Game card style with 3D hover effect */
     .game-card {
-      background-color: #111;
+      background-color: rgba(0, 0, 0, 0.6);
+      border: 2px solid #ff00ff;
+      border-radius: 10px;
       text-align: center;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+      overflow: hidden;
     }
 
     .game-card:hover {
-      transform: scale(1.05);
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
     }
 
     .game-card img {
       width: 100%;
-      height: 140px;
+      height: 150px;
       object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .game-card:hover img {
+      transform: scale(1.1);
     }
 
     .game-title {
       padding: 10px;
-      font-size: 0.75rem;
+      font-size: 1.2rem;
       color: #ffffff;
       background-color: #222;
+      border-top: 2px solid #ff00ff;
     }
 
     .content p {
-      font-size: 0.9rem;
+      font-size: 1.2rem;
       color: #ffffff;
     }
+
+    /* Smooth scrolling for the page */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Footer style for more polish */
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #fff;
+      font-size: 1rem;
+    }
+
   </style>
 </head>
 <body>
@@ -81,9 +123,13 @@
   </div>
 
   <div class="content">
-    <p>Click a game below to start playing:</p>
+    <p>Click on any game below to start playing:</p>
     <div class="games-grid" id="games-container"></div>
   </div>
+
+  <footer>
+    <p>Enjoy our collection of browser-based games!</p>
+  </footer>
 
   <script>
     const games = [
@@ -116,6 +162,36 @@
         name: "Pacman",
         image: "https://i.imgur.com/HFqkFlt.png",
         link: "https://www.google.com/logos/2010/pacman10-i.html"
+      },
+      {
+        name: "Basketball Stars",
+        image: "https://i.imgur.com/Jgfj5FH.png",
+        link: "https://basketballstarsgame.com"
+      },
+      {
+        name: "Superhot",
+        image: "https://i.imgur.com/l0jf3To.png",
+        link: "https://superhot.io"
+      },
+      {
+        name: "Krunker.io",
+        image: "https://i.imgur.com/izYtZzz.png",
+        link: "https://krunker.io"
+      },
+      {
+        name: "Agar.io",
+        image: "https://i.imgur.com/nZmjvKx.png",
+        link: "https://agar.io"
+      },
+      {
+        name: "Shell Shockers",
+        image: "https://i.imgur.com/dFyNE8g.png",
+        link: "https://shellshock.io"
+      },
+      {
+        name: "Wormax.io",
+        image: "https://i.imgur.com/MVxOa1r.png",
+        link: "https://wormax.io"
       }
     ];
 
@@ -142,3 +218,4 @@
   </script>
 </body>
 </html>
+
