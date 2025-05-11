@@ -28,6 +28,9 @@
       font-size: 1.2em;
       color: green;
     }
+    #shopArea {
+      display: none; /* Hidden initially */
+    }
   </style>
 </head>
 <body>
@@ -38,8 +41,8 @@
 
   <div id="shopArea">
     <p class="dialog" id="buyerMessage"></p>
-    <button onclick="acceptOffer()">Accept</button>
-    <button onclick="declineOffer()">Decline</button>
+    <button id="acceptButton" onclick="acceptOffer()">Accept</button>
+    <button id="declineButton" onclick="declineOffer()">Decline</button>
   </div>
 
   <div style="margin-top: 2em;">
@@ -85,6 +88,8 @@
       document.getElementById("shopArea").style.display = "block";
 
       offerVisible = true;
+      document.getElementById("acceptButton").style.display = "inline-block"; // Show accept button
+      document.getElementById("declineButton").style.display = "inline-block"; // Show decline button
     }
 
     function startCustomerTimer() {
@@ -110,13 +115,15 @@
         saveState();
         updateDisplay();
         offerVisible = false;
-        startCustomerTimer();
+        document.getElementById("shopArea").style.display = "none"; // Hide offer area
+        startCustomerTimer(); // Start waiting for the next customer
       }
     }
 
     function declineOffer() {
       offerVisible = false;
-      startCustomerTimer();
+      document.getElementById("shopArea").style.display = "none"; // Hide offer area
+      startCustomerTimer(); // Start waiting for the next customer
     }
 
     function saveState() {
