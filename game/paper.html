@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📄 Paper</title>
+  <title>📄 Paper Factory</title>
   <style>
     body {
       font-family: sans-serif;
@@ -24,7 +24,7 @@
   </style>
 </head>
 <body>
-  <h1>📄 Paper</h1>
+  <h1>📄 Paper Factory</h1>
   <p><strong>Paper:</strong> <span id="paperCount">0</span></p>
   <p><strong>Material:</strong> <span id="materialCount">0</span></p>
   <p><strong>Money:</strong> $<span id="moneyCount">0</span></p>
@@ -49,7 +49,8 @@
     let paper = parseInt(localStorage.getItem("paper")) || 0;
     let mills = parseInt(localStorage.getItem("mills")) || 0;
     let money = parseFloat(localStorage.getItem("money")) || 0;
-    let material = parseInt(localStorage.getItem("material")) || 0;
+    let material = localStorage.getItem("material");
+    material = material !== null ? parseInt(material) : 5;  // Start with 5 material if no data exists
     let price = parseFloat(localStorage.getItem("price")) || 2;
 
     function updateDisplay() {
