@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📄 Paper</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fefefe;
+      color: #333;
+      text-align: center;
+      padding: 2em;
+    }
+    button, input[type="number"] {
+      font-size: 1.1em;
+      padding: 0.4em 1em;
+      margin: 0.5em;
+    }
+    .upgrade {
+      margin-top: 1em;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>📄 Paper</h1>
+  <p><strong>Paper:</strong> <span id="paperCount">0</span></p>
+  <p><strong>Material:</strong> <span id="materialCount">0</span></p>
+  <p><strong>Money:</strong> $<span id="moneyCount">0</span></p>
+
+  <button onclick="buyMaterial()">Buy Material ($1)</button>
+  <button onclick="makePaper()">Make Paper (Uses 1 material)</button>
+
+  <div class="upgrade">
+    <button onclick="buyMill()">Buy Paper Mill ($20) — Owned: <span id="mills">0</span></button>
+  </div>
+
+  <div class="upgrade">
+    <label>
+      Set Paper Price: $<input id="priceInput" type="number" value="2" min="0.1" step="0.1" onchange="updatePrice()">
+    </label>
+  </div>
+
+  <p><strong>Selling at:</strong> $<span id="priceDisplay">2.00</span> per sheet</p>
+  <p><strong>Market Demand:</strong> <span id="marketDemand">0%</span> buying rate</p>
+
+  <script>
+    let paper = parseInt(localStorage.getItem("paper")) || 0;
+    let mills = parseInt(localStorage.getItem("mills")) || 0;
+    let money = parseFloat(localStorage.getItem("money")) || 0;
+    let material = parseInt(localStorage.getItem("material")) || 0;
+    let price = parseFloat(localStorage.getItem("price")) || 2;
+
+    function updateDisplay() {
+      document.getElementById("paperCount").textContent = paper;
+      document.getElementById("mills").textContent = mills;
+      document.getElementById("moneyCount").textContent = money.toFixed(2);
+      document.getElementById("materialCount").textContent = material;
+      document.getElementById("priceDisplay").textContent = price.toFixed(2);
+      document.getElementById("priceInput").value = price.toFixed(2);
+
+      // Simple demand visualization: 100% at $1, down to ~0% at $12
+      const demand = Math.max(0, Math.round(100 * (1 - ((Math.min(price, 12) - 1) / 11))));
+      document.getElementById("marketDemand").textContent = demand + "%";
+    }
+
+    function makePaper() {
+      if (material >= 1) {
+        paper++;
+        material--;
+        updateDisplay();
+      } else {
+        alert("You need more material to make paper!");
+      }
+    }
+
+    function buyMill() {
+      if (money >= 20) {
+        money -= 20;
+        mills++;
+        updateDisplay();
+      }
+    }
+
+    function buyMaterial() {
+      if (money >= 1) {
+        money -= 1;
+        material++;
+        updateDisplay();
+      }
+    }
+
+    function updatePrice() {
+      let input = parseFloat(document.getElementById("priceInput").value);
+      if (isNaN(input) || input <= 0) {
+        alert("Please enter a valid price greater than 0.");
+        document.getElementById("priceInput").value = price.toFixed(2);
+        return;
+      }
+      if (input > 12) input = 12; // Clamp at $12
+      price = input;
+      localStorage.setItem("price", price);
+      updateDisplay();
+    }
+
+    function getSellDelayRange(price) {
+      const cappedPrice = Math.min(price, 12);
+
+      if (cappedPrice <= 1) {
+        return [1000, 4000]; // 1–4 sec
+      } else if (cappedPrice <= 2) {
+        return [5000, 20000]; // 5–20 sec
+      } else if (cappedPrice <= 6) {
+        return [10000, 30000]; // 10–30 sec
+      } else {
+        return [30000, 100000]; // 30–100 sec
+      }
+    }
+
+    function sellPaper() {
+      if (paper > 0) {
+        paper--;
+        money += price;
+        updateDisplay();
+      }
+
+      const [minDelay, maxDelay] = getSellDelayRange(price);
+      const nextDelay = Math.random() * (maxDelay - minDelay) + minDelay;
+      setTimeout(sellPaper, nextDelay);
+    }
+
+    setTimeout(sellPaper, 1000);
+
+    setInterval(() => {
+      const toMake = Math.min(mills, material);
+      paper += toMake;
+      material -= toMake;
+      updateDisplay();
+    }, 1000);
+
+    setInterval(() => {
+      localStorage.setItem("paper", paper);
+      localStorage.setItem("mills", mills);
+      localStorage.setItem("money", money);
+      localStorage.setItem("material", material);
+      localStorage.setItem("price", price);
+    }, 1000);
+
+    updateDisplay();
+  </script>
+</body>
+</html>

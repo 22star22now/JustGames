@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🏢 Company HQ</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 2em;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .info {
+      margin-bottom: 2em;
+      font-size: 1.2em;
+    }
+    button {
+      font-size: 1.2em;
+      padding: 0.6em 1.5em;
+      margin: 1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏢 Your Company</h1>
+  <div class="info">
+    <p><strong>Current Money:</strong> $<span id="moneyDisplay">0</span></p>
+  </div>
+
+  <div>
+    <button onclick="location.href='paper.html'">Go to 📄 Paper Factory</button>
+    <!-- More game areas can go here -->
+    <!-- <button onclick="location.href='warehouse.html'">Go to Warehouse</button> -->
+  </div>
+
+  <script>
+    const money = parseFloat(localStorage.getItem("money")) || 0;
+    document.getElementById("moneyDisplay").textContent = money.toFixed(2);
+  </script>
+</body>
+</html>
