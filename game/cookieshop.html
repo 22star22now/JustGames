@@ -40,7 +40,6 @@
     <p class="dialog" id="buyerMessage"></p>
     <button onclick="acceptOffer()">Accept</button>
     <button onclick="declineOffer()">Decline</button>
-    <p id="message"></p>
   </div>
 
   <div style="margin-top: 2em;">
@@ -66,6 +65,8 @@
     let offerPrice = 0;
     let customerName = "";
     let customerTimer;
+    let offerVisible = false;
+    let initialWaitTime = Math.floor(Math.random() * 21) + 5; // Random initial wait time between 5 and 25 seconds
 
     function updateDisplay() {
       document.getElementById("cookieCount").textContent = cookies;
@@ -74,20 +75,32 @@
 
     function newOffer() {
       if (cookies < 1) {
-        document.getElementById("buyerMessage").textContent = "You're out of cookies!";
-        document.getElementById("shopArea").style.display = "none";
+        document.getElementById("shopArea").style.display = "none"; // No cookies, hide the offer area
         return;
       }
 
       offerPrice = Math.floor(Math.random() * 21) + 10; // 10 to 30
       customerName = names[Math.floor(Math.random() * names.length)];
       document.getElementById("buyerMessage").textContent = `${customerName} wants to buy a cookie for $${offerPrice}.`;
-      document.getElementById("message").textContent = "";
       document.getElementById("shopArea").style.display = "block";
 
-      // Random delay for next customer
-      let delayTime = Math.floor(Math.random() * 21) + 5; // Delay between 5 and 25 seconds
-      customerTimer = setTimeout(newOffer, delayTime * 1000); // Convert to milliseconds
+      offerVisible = true;
+    }
+
+    function startCustomerTimer() {
+      const delayTime = Math.floor(Math.random() * 21) + 5; // Random delay between 5 and 25 seconds
+      setTimeout(() => {
+        if (offerVisible) {
+          document.getElementById("shopArea").style.display = "none"; // Hide the current offer before new one
+        }
+        newOffer();
+      }, delayTime * 1000); // Convert to milliseconds
+    }
+
+    function startInitialWait() {
+      setTimeout(() => {
+        startCustomerTimer(); // Start the customer timer after initial wait
+      }, initialWaitTime * 1000);
     }
 
     function acceptOffer() {
@@ -96,16 +109,14 @@
         money += offerPrice;
         saveState();
         updateDisplay();
-        document.getElementById("message").textContent = `You sold a cookie to ${customerName} for $${offerPrice}!`;
-        clearTimeout(customerTimer);
-        newOffer();
+        offerVisible = false;
+        startCustomerTimer();
       }
     }
 
     function declineOffer() {
-      document.getElementById("message").textContent = `You declined ${customerName}'s offer.`;
-      clearTimeout(customerTimer);
-      newOffer();
+      offerVisible = false;
+      startCustomerTimer();
     }
 
     function saveState() {
@@ -114,7 +125,7 @@
     }
 
     updateDisplay();
-    newOffer();
+    startInitialWait(); // Start the initial wait when the page loads
   </script>
 </body>
 </html>
