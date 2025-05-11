@@ -29,21 +29,18 @@
   <h1>🏢 Your Company</h1>
   <div class="info">
     <p><strong>Current Money:</strong> $<span id="moneyDisplay">0</span></p>
-    <p><strong>Cookies in Storage:</strong> <span id="cookieCount">0</span></p>
   </div>
 
   <div>
     <button onclick="location.href='paper.html'">Go to 📄 Paper Factory</button>
-    <button onclick="location.href='cookief.html'">Go to 🍪 Cookie Factory</button>
-    <button onclick="location.href='cookieshop.html'">Go to 🍪 Cookie Shop</button>
-    <!-- Future sections can be added here -->
+    <button onclick="location.href='cookiefactory.html'">Go to 🍪 Cookie Factory</button>
+    <button onclick="location.href='cookieShop.html'">Go to 🍪 Cookie Shop</button>
+    <button onclick="location.href='jewelryfactory.html'">Go to 💍 Jewelry Factory</button>
   </div>
 
   <script>
     const money = parseFloat(localStorage.getItem("money")) || 0;
-    const cookies = parseInt(localStorage.getItem("cookies")) || 0;
     document.getElementById("moneyDisplay").textContent = money.toFixed(2);
-    document.getElementById("cookieCount").textContent = cookies;
   </script>
 </body>
 </html>
