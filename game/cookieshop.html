@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🍪 Cookie Shop</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #fff0f5;
+      text-align: center;
+      padding: 2em;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .dialog {
+      font-size: 1.4em;
+      margin: 1em;
+    }
+    button {
+      font-size: 1em;
+      padding: 0.5em 1.2em;
+      margin: 0.5em;
+      cursor: pointer;
+    }
+    #message {
+      margin-top: 1em;
+      font-size: 1.2em;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍪 Cookie Shop</h1>
+
+  <p><strong>Cookies:</strong> <span id="cookieCount">0</span></p>
+  <p><strong>Money:</strong> $<span id="moneyDisplay">0</span></p>
+
+  <div id="shopArea">
+    <p class="dialog" id="buyerMessage"></p>
+    <button onclick="acceptOffer()">Accept</button>
+    <button onclick="declineOffer()">Decline</button>
+    <p id="message"></p>
+  </div>
+
+  <div style="margin-top: 2em;">
+    <button onclick="location.href='index.html'">🔙 Back to HQ</button>
+  </div>
+
+  <script>
+    const names = [
+      "Alice", "Ben", "Carla", "Derek", "Ella", "Felix", "Grace", "Henry", "Isla", "Jack",
+      "Karen", "Leo", "Mila", "Noah", "Olive", "Peter", "Quinn", "Ruby", "Sam", "Tina",
+      "Uma", "Victor", "Wendy", "Xander", "Yara", "Zane", "Amy", "Brian", "Cindy", "Dave",
+      "Eva", "Finn", "Gina", "Harvey", "Ivy", "Jon", "Kira", "Liam", "Maya", "Nina",
+      "Owen", "Paula", "Quincy", "Rose", "Steve", "Tara", "Uri", "Violet", "Will", "Xia",
+      "Yosef", "Zoey", "Asher", "Bella", "Chloe", "Dean", "Elsa", "Freddy", "Gwen", "Hugo",
+      "Indie", "Jay", "Kylie", "Lola", "Max", "Nate", "Opal", "Penny", "Quora", "Ralph",
+      "Sara", "Theo", "Una", "Vince", "Willa", "Ximena", "Yuki", "Zara", "Alfie", "Brie",
+      "Cruz", "Dani", "Emmy", "Ford", "Gia", "Hans", "Izzy", "Jude", "Kat", "Lars",
+      "Moe", "Nico", "Ozzy", "Pia", "Quin", "Rhea", "Sky", "Toby", "Umi", "Vera"
+    ];
+
+    let money = parseFloat(localStorage.getItem("money")) || 0;
+    let cookies = parseInt(localStorage.getItem("cookies")) || 0;
+    let offerPrice = 0;
+    let customerName = "";
+
+    function updateDisplay() {
+      document.getElementById("cookieCount").textContent = cookies;
+      document.getElementById("moneyDisplay").textContent = money.toFixed(2);
+    }
+
+    function newOffer() {
+      if (cookies < 1) {
+        document.getElementById("buyerMessage").textContent = "You're out of cookies!";
+        document.getElementById("shopArea").style.display = "none";
+        return;
+      }
+
+      offerPrice = Math.floor(Math.random() * 21) + 10; // 10 to 30
+      customerName = names[Math.floor(Math.random() * names.length)];
+      document.getElementById("buyerMessage").textContent = `${customerName} wants to buy a cookie for $${offerPrice}.`;
+      document.getElementById("message").textContent = "";
+    }
+
+    function acceptOffer() {
+      if (cookies > 0) {
+        cookies--;
+        money += offerPrice;
+        saveState();
+        updateDisplay();
+        document.getElementById("message").textContent = `You sold a cookie to ${customerName} for $${offerPrice}!`;
+        newOffer();
+      }
+    }
+
+    function declineOffer() {
+      document.getElementById("message").textContent = `You declined ${customerName}'s offer.`;
+      newOffer();
+    }
+
+    function saveState() {
+      localStorage.setItem("money", money);
+      localStorage.setItem("cookies", cookies);
+    }
+
+    updateDisplay();
+    newOffer();
+  </script>
+</body>
+</html>
