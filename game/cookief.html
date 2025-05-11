@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🍪 Cookie Factory</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #fff8f0;
+      text-align: center;
+      padding: 2em;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 1em;
+    }
+    .info {
+      font-size: 1.2em;
+      margin-bottom: 1em;
+    }
+    button {
+      font-size: 1em;
+      padding: 0.5em 1em;
+      margin: 0.5em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍪 Cookie Factory</h1>
+
+  <div class="info">
+    <p><strong>Money:</strong> $<span id="moneyDisplay">0</span></p>
+    <p><strong>Cookies Made:</strong> <span id="cookieCount">0</span></p>
+    <p><strong>Flour:</strong> <span id="flourCount">0</span></p>
+    <p><strong>Sugar:</strong> <span id="sugarCount">0</span></p>
+    <p><strong>Dough:</strong> <span id="doughCount">0</span></p>
+  </div>
+
+  <div>
+    <button onclick="buyIngredient('flour', 5)">Buy Flour ($5)</button>
+    <button onclick="buyIngredient('sugar', 3)">Buy Sugar ($3)</button>
+    <button onclick="buyIngredient('dough', 5)">Buy Dough ($5)</button>
+  </div>
+
+  <div>
+    <button onclick="makeCookie()">Make Cookie</button>
+  </div>
+
+  <script>
+    let money = parseFloat(localStorage.getItem("money")) || 0;
+    let cookies = parseInt(localStorage.getItem("cookies")) || 0;
+    let flour = parseInt(localStorage.getItem("flour")) || 0;
+    let sugar = parseInt(localStorage.getItem("sugar")) || 0;
+    let dough = parseInt(localStorage.getItem("dough")) || 0;
+
+    function updateDisplay() {
+      document.getElementById("moneyDisplay").textContent = money.toFixed(2);
+      document.getElementById("cookieCount").textContent = cookies;
+      document.getElementById("flourCount").textContent = flour;
+      document.getElementById("sugarCount").textContent = sugar;
+      document.getElementById("doughCount").textContent = dough;
+    }
+
+    function buyIngredient(type, cost) {
+      if (money >= cost) {
+        money -= cost;
+        if (type === 'flour') flour++;
+        if (type === 'sugar') sugar++;
+        if (type === 'dough') dough++;
+        saveState();
+        updateDisplay();
+      }
+    }
+
+    function makeCookie() {
+      if (flour >= 1 && sugar >= 1 && dough >= 1) {
+        flour--;
+        sugar--;
+        dough--;
+        cookies++;
+        saveState();
+        updateDisplay();
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem("money", money);
+      localStorage.setItem("cookies", cookies);
+      localStorage.setItem("flour", flour);
+      localStorage.setItem("sugar", sugar);
+      localStorage.setItem("dough", dough);
+    }
+
+    updateDisplay();
+  </script>
+</body>
+</html>
