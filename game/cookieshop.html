@@ -65,6 +65,7 @@
     let cookies = parseInt(localStorage.getItem("cookies")) || 0;
     let offerPrice = 0;
     let customerName = "";
+    let customerTimer;
 
     function updateDisplay() {
       document.getElementById("cookieCount").textContent = cookies;
@@ -82,6 +83,11 @@
       customerName = names[Math.floor(Math.random() * names.length)];
       document.getElementById("buyerMessage").textContent = `${customerName} wants to buy a cookie for $${offerPrice}.`;
       document.getElementById("message").textContent = "";
+      document.getElementById("shopArea").style.display = "block";
+
+      // Random delay for next customer
+      let delayTime = Math.floor(Math.random() * 21) + 5; // Delay between 5 and 25 seconds
+      customerTimer = setTimeout(newOffer, delayTime * 1000); // Convert to milliseconds
     }
 
     function acceptOffer() {
@@ -91,12 +97,14 @@
         saveState();
         updateDisplay();
         document.getElementById("message").textContent = `You sold a cookie to ${customerName} for $${offerPrice}!`;
+        clearTimeout(customerTimer);
         newOffer();
       }
     }
 
     function declineOffer() {
       document.getElementById("message").textContent = `You declined ${customerName}'s offer.`;
+      clearTimeout(customerTimer);
       newOffer();
     }
 
