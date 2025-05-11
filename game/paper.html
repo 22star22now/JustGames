@@ -45,6 +45,11 @@
   <p><strong>Selling at:</strong> $<span id="priceDisplay">2.00</span> per sheet</p>
   <p><strong>Market Demand:</strong> <span id="marketDemand">0%</span> buying rate</p>
 
+  <!-- Back Button to Return to Company HQ -->
+  <div>
+    <button onclick="location.href='index.html'">Back to Company HQ</button>
+  </div>
+
   <script>
     let paper = parseInt(localStorage.getItem("paper")) || 0;
     let mills = parseInt(localStorage.getItem("mills")) || 0;
