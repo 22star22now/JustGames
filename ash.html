@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Game Viewer</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #000;
+    }
+
+    #game-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    #back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      padding: 12px 20px;
+      font-family: sans-serif;
+      font-size: 16px;
+      background-color: #0a0a0a;
+      color: #00ff00;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ff00;
+    }
+
+    #back-button:hover {
+      background-color: #111;
+      box-shadow: 0 0 20px #00ff00;
+    }
+  </style>
+</head>
+<body>
+  <button id="back-button">⬅ Back</button>
+  <iframe id="game-frame" src="https://html-classic.itch.zone/html/13624147/index.html"></iframe>
+
+  <script>
+    document.getElementById('back-button').onclick = function () {
+      window.open("https://22star22now.github.io/JustGames/", "_self");
+    };
+  </script>
+</body>
+</html>
