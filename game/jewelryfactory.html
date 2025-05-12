@@ -39,7 +39,7 @@
   </div>
 
   <h2>Buy Materials</h2>
-  <button onclick="buyMaterial('silver')">Buy Silver ($400)</button>
+  <button onclick="buyMaterial('silver')">Buy Silver ($200)</button>
   <button onclick="buyMaterial('gold')">Buy Gold ($650)</button>
   <button onclick="buyMaterial('diamond')">Buy Diamond ($1000)</button>
 
@@ -84,7 +84,7 @@
     function buyMaterial(material) {
       let cost = 0;
       switch (material) {
-        case 'silver': cost = 400; break;
+        case 'silver': cost = 200; break;
         case 'gold': cost = 650; break;
         case 'diamond': cost = 1000; break;
       }
@@ -99,55 +99,40 @@
     }
 
     function createJewelry(type) {
-      let cost = 0;
-      let requiredMaterial = 0;
-
       switch (type) {
         case 'silver_ring':
           if (silver >= 2) {
-            cost = 400 * 2;
-            requiredMaterial = 2;
-            silver -= requiredMaterial;
+            silver -= 2;
             silverRings++;
           }
           break;
         case 'diamond_ring':
           if (diamond >= 1) {
-            cost = 1000;
-            requiredMaterial = 1;
-            diamond -= requiredMaterial;
+            diamond -= 1;
             diamondRings++;
           }
           break;
         case 'silver_necklace':
           if (silver >= 6) {
-            cost = 400 * 6;
-            requiredMaterial = 6;
-            silver -= requiredMaterial;
+            silver -= 6;
             silverNecklaces++;
           }
           break;
         case 'diamond_necklace':
           if (diamond >= 3) {
-            cost = 1000 * 3;
-            requiredMaterial = 3;
-            diamond -= requiredMaterial;
+            diamond -= 3;
             diamondNecklaces++;
           }
           break;
         case 'gold_ring':
           if (gold >= 1) {
-            cost = 650;
-            requiredMaterial = 1;
-            gold -= requiredMaterial;
+            gold -= 1;
             goldRings++;
           }
           break;
         case 'gold_necklace':
           if (gold >= 3) {
-            cost = 650 * 3;
-            requiredMaterial = 3;
-            gold -= requiredMaterial;
+            gold -= 3;
             goldNecklaces++;
           }
           break;
@@ -174,3 +159,4 @@
   </script>
 </body>
 </html>
+>
