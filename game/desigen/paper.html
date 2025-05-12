@@ -9,47 +9,51 @@
   <style>
     body {
       font-family: 'Rubik', sans-serif;
-      background: linear-gradient(to right, #d7e1ec, #f1f5f9);
-      color: #1e293b;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #ffffff;
       text-align: center;
       padding: 2em 1em;
     }
 
     h1 {
       font-family: 'Press Start 2P', cursive;
-      font-size: 1.5em;
-      color: #1e40af;
+      font-size: 1.8em;
+      color: #ffcc00;
       margin-bottom: 1.5em;
-      text-shadow: 1px 1px #cbd5e1;
+      text-shadow: 2px 2px #000;
     }
 
-    p {
+    .stat {
       font-size: 1.2em;
-      margin: 0.4em;
+      margin: 0.5em auto;
+      padding: 0.3em 1em;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      display: inline-block;
     }
 
-    span {
+    .stat span {
       font-family: 'Orbitron', sans-serif;
-      color: #0f766e;
+      color: #00ffcc;
     }
 
     button, input[type="number"] {
       font-family: 'Rubik', sans-serif;
       font-size: 1em;
-      padding: 0.5em 1.2em;
+      padding: 0.7em 1.4em;
       margin: 0.5em;
       border: none;
       border-radius: 8px;
-      background-color: #60a5fa;
-      color: #fff;
+      background-color: #ffcc00;
+      color: #000;
       font-weight: bold;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-      transition: all 0.2s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, background 0.2s ease;
     }
 
     button:hover, input[type="number"]:hover {
-      background-color: #3b82f6;
-      transform: scale(1.03);
+      background-color: #ffaa00;
+      transform: scale(1.05);
     }
 
     input[type="number"] {
@@ -63,7 +67,7 @@
     }
 
     label {
-      font-weight: 600;
+      font-weight: bold;
     }
 
     .back-button {
@@ -74,12 +78,15 @@
 </head>
 <body>
   <h1>📄 Paper Factory</h1>
-  <p><strong>Paper:</strong> <span id="paperCount">0</span></p>
-  <p><strong>Material:</strong> <span id="materialCount">0</span></p>
-  <p><strong>Money:</strong> $<span id="moneyCount">0</span></p>
 
-  <button onclick="buyMaterial()">Buy Material ($1)</button>
-  <button onclick="makePaper()">Make Paper (Uses 1 material)</button>
+  <div class="stat"><strong>Paper:</strong> <span id="paperCount">0</span></div>
+  <div class="stat"><strong>Material:</strong> <span id="materialCount">0</span></div>
+  <div class="stat"><strong>Money:</strong> $<span id="moneyCount">0</span></div>
+
+  <div>
+    <button onclick="buyMaterial()">Buy Material ($1)</button>
+    <button onclick="makePaper()">Make Paper (Uses 1 material)</button>
+  </div>
 
   <div class="upgrade">
     <button onclick="buyMill()">Buy Paper Mill ($20) — Owned: <span id="mills">0</span></button>
@@ -91,8 +98,8 @@
     </label>
   </div>
 
-  <p><strong>Selling at:</strong> $<span id="priceDisplay">2.00</span> per sheet</p>
-  <p><strong>Market Demand:</strong> <span id="marketDemand">0%</span> buying rate</p>
+  <div class="stat"><strong>Selling at:</strong> $<span id="priceDisplay">2.00</span> per sheet</div>
+  <div class="stat"><strong>Market Demand:</strong> <span id="marketDemand">0%</span> buying rate</div>
 
   <div class="back-button">
     <button onclick="location.href='index.html'">🏢 Back to Company HQ</button>
