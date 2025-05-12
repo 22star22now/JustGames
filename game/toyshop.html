@@ -37,20 +37,23 @@
   <div id="toys-container"></div>
 
   <br>
-  <!-- Back to HQ button -->
   <button onclick="location.href='index.html'">⬅️ Back to HQ</button>
 
   <script>
     const toys = [
-      { name: 'Teddy Bear', key: 'teddy', basePrice: 30 },
-      { name: 'Toy Car', key: 'car', basePrice: 30 },
-      { name: 'Doll', key: 'doll', basePrice: 30 },
+      { name: 'Teddy Bear', key: 'teddies', basePrice: 30 },
+      { name: 'Toy Car', key: 'cars', basePrice: 30 },
+      { name: 'Doll', key: 'dolls', basePrice: 30 },
     ];
 
     let money = parseFloat(localStorage.getItem('money')) || 0;
 
     function getInventory(key) {
-      return parseInt(localStorage.getItem(`inv_${key}`)) || 0;
+      return parseInt(localStorage.getItem(key)) || 0;
+    }
+
+    function setInventory(key, value) {
+      localStorage.setItem(key, value);
     }
 
     function getPrice(key, basePrice) {
@@ -117,26 +120,36 @@
       }
     }
 
-    function sellLoop(toy) {
-      const price = getPrice(toy.key, toy.basePrice);
-      const [minDelay, maxDelay] = getDynamicDelay(price);
-      const delay = minDelay + Math.random() * (maxDelay - minDelay);
+    function startSelling() {
+      function sellNextToy() {
+        for (const toy of toys) {
+          const inv = getInventory(toy.key);
+          if (inv > 0) {
+            const price = getPrice(toy.key, toy.basePrice);
+            const [minDelay, maxDelay] = getDynamicDelay(price);
+            const delay = minDelay + Math.random() * (maxDelay - minDelay);
 
-      setTimeout(() => {
-        let inv = getInventory(toy.key);
-        if (inv > 0) {
-          inv--;
-          money += price;
-          localStorage.setItem(`inv_${toy.key}`, inv);
-          localStorage.setItem('money', money);
-          updateDisplay();
+            setTimeout(() => {
+              let current = getInventory(toy.key);
+              if (current > 0) {
+                setInventory(toy.key, current - 1);
+                money += price;
+                localStorage.setItem('money', money);
+                updateDisplay();
+              }
+              sellNextToy(); // sell one at a time
+            }, delay);
+            return; // only sell one at a time
+          }
         }
-        sellLoop(toy);
-      }, delay);
+        setTimeout(sellNextToy, 2000); // check again later if none in stock
+      }
+
+      sellNextToy();
     }
 
     updateDisplay();
-    toys.forEach(toy => sellLoop(toy));
+    startSelling();
   </script>
 </body>
 </html>
