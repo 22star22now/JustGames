@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🧸 Toy Factory</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f0faff;
+      padding: 2em;
+    }
+    button {
+      margin: 0.5em;
+      padding: 0.6em 1.2em;
+      font-size: 1em;
+    }
+    h2 {
+      margin-top: 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧸 Toy Factory</h1>
+
+  <p><strong>Money:</strong> $<span id="money">0</span></p>
+
+  <h2>Materials</h2>
+  <p>Plastic: <span id="plastic">0</span> 
+     | Fabric: <span id="fabric">0</span> 
+     | Paint: <span id="paint">0</span></p>
+  <button onclick="buy('plastic', 10)">Buy Plastic ($10)</button>
+  <button onclick="buy('fabric', 10)">Buy Fabric ($10)</button>
+  <button onclick="buy('paint', 5)">Buy Paint ($5)</button>
+
+  <h2>Craft Toys</h2>
+  <p>Teddy Bears: <span id="teddies">0</span></p>
+  <p>Toy Cars: <span id="cars">0</span></p>
+  <p>Dolls: <span id="dolls">0</span></p>
+  <button onclick="craftTeddy()">Make Teddy Bear</button>
+  <button onclick="craftCar()">Make Toy Car</button>
+  <button onclick="craftDoll()">Make Doll</button>
+
+  <br><br>
+  <button onclick="location.href='index.html'">⬅️ Back to HQ</button>
+
+  <script>
+    const get = (key) => parseInt(localStorage.getItem(key)) || 0;
+    const set = (key, value) => localStorage.setItem(key, value);
+
+    let money = parseFloat(localStorage.getItem("money")) || 0;
+    let plastic = get("plastic");
+    let fabric = get("fabric");
+    let paint = get("paint");
+    let teddies = get("teddies");
+    let cars = get("cars");
+    let dolls = get("dolls");
+
+    function update() {
+      document.getElementById("money").innerText = money.toFixed(2);
+      document.getElementById("plastic").innerText = plastic;
+      document.getElementById("fabric").innerText = fabric;
+      document.getElementById("paint").innerText = paint;
+      document.getElementById("teddies").innerText = teddies;
+      document.getElementById("cars").innerText = cars;
+      document.getElementById("dolls").innerText = dolls;
+    }
+
+    function buy(type, cost) {
+      if (money >= cost) {
+        money -= cost;
+        if (type === "plastic") plastic++;
+        else if (type === "fabric") fabric++;
+        else if (type === "paint") paint++;
+        save();
+        update();
+      }
+    }
+
+    function craftTeddy() {
+      if (fabric >= 1 && paint >= 1) {
+        fabric -= 1;
+        paint -= 1;
+        teddies++;
+        save();
+        update();
+      }
+    }
+
+    function craftCar() {
+      if (plastic >= 2 && paint >= 1) {
+        plastic -= 2;
+        paint -= 1;
+        cars++;
+        save();
+        update();
+      }
+    }
+
+    function craftDoll() {
+      if (plastic >= 1 && fabric >= 1 && paint >= 1) {
+        plastic -= 1;
+        fabric -= 1;
+        paint -= 1;
+        dolls++;
+        save();
+        update();
+      }
+    }
+
+    function save() {
+      set("money", money);
+      set("plastic", plastic);
+      set("fabric", fabric);
+      set("paint", paint);
+      set("teddies", teddies);
+      set("cars", cars);
+      set("dolls", dolls);
+    }
+
+    update();
+  </script>
+</body>
+</html>
