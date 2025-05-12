@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🧸 Toy Shop</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f3f8ff;
+      padding: 2em;
+    }
+    .toy {
+      margin: 1em 0;
+      padding: 1em;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    button {
+      margin: 0.3em;
+      padding: 0.5em 1em;
+      font-size: 1em;
+    }
+    .price-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧸 Toy Shop</h1>
+  <p><strong>Money:</strong> $<span id="money">0</span></p>
+
+  <div id="toys-container"></div>
+
+  <br>
+  <!-- Back to HQ button -->
+  <button onclick="location.href='index.html'">⬅️ Back to HQ</button>
+
+  <script>
+    const toys = [
+      { name: 'Teddy Bear', key: 'teddy', basePrice: 30 },
+      { name: 'Toy Car', key: 'car', basePrice: 30 },
+      { name: 'Doll', key: 'doll', basePrice: 30 },
+    ];
+
+    let money = parseFloat(localStorage.getItem('money')) || 0;
+
+    function getInventory(key) {
+      return parseInt(localStorage.getItem(`inv_${key}`)) || 0;
+    }
+
+    function getPrice(key, basePrice) {
+      const stored = localStorage.getItem(`price_${key}`);
+      if (stored === null) {
+        localStorage.setItem(`price_${key}`, basePrice);
+        return basePrice;
+      }
+      return parseFloat(stored);
+    }
+
+    function setPrice(key, value, basePrice) {
+      let current = getPrice(key, basePrice);
+      let newPrice = Math.max(1, current + value);
+      localStorage.setItem(`price_${key}`, newPrice);
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      document.getElementById('money').textContent = money.toFixed(2);
+      const container = document.getElementById('toys-container');
+      container.innerHTML = '';
+
+      toys.forEach(toy => {
+        const price = getPrice(toy.key, toy.basePrice);
+        const inv = getInventory(toy.key);
+
+        const div = document.createElement('div');
+        div.className = 'toy';
+        div.innerHTML = `
+          <h3>${toy.name}</h3>
+          <p>In stock: <strong>${inv}</strong></p>
+          <div class="price-controls">
+            <button onclick="setPrice('${toy.key}', -1, ${toy.basePrice})">⬇️</button>
+            <p>Price: $<strong>${price}</strong></p>
+            <button onclick="setPrice('${toy.key}', 1, ${toy.basePrice})">⬆️</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function getDynamicDelay(price) {
+      const baseMin = 4000;
+      const baseMax = 6000;
+      const normal = 30;
+
+      const diff = price - normal;
+
+      if (diff === 0) {
+        return [baseMin, baseMax];
+      } else if (diff < 0) {
+        const faster = -diff;
+        return [
+          Math.max(1000, baseMin - faster * 300),
+          Math.max(1500, baseMax - faster * 300)
+        ];
+      } else {
+        const slower = diff;
+        return [
+          baseMin + slower * 1000,
+          baseMax + slower * 1250
+        ];
+      }
+    }
+
+    function sellLoop(toy) {
+      const price = getPrice(toy.key, toy.basePrice);
+      const [minDelay, maxDelay] = getDynamicDelay(price);
+      const delay = minDelay + Math.random() * (maxDelay - minDelay);
+
+      setTimeout(() => {
+        let inv = getInventory(toy.key);
+        if (inv > 0) {
+          inv--;
+          money += price;
+          localStorage.setItem(`inv_${toy.key}`, inv);
+          localStorage.setItem('money', money);
+          updateDisplay();
+        }
+        sellLoop(toy);
+      }, delay);
+    }
+
+    updateDisplay();
+    toys.forEach(toy => sellLoop(toy));
+  </script>
+</body>
+</html>
