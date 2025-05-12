@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🍪 Cookie Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(to right, #4e342e, #8d6e63, #d7ccc8);
+      color: #fff3e6;
+      text-align: center;
+      padding: 2em 1em;
+    }
+
+    h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.5em;
+      color: #ffdd99;
+      text-shadow: 2px 2px #000;
+      margin-bottom: 1.5em;
+    }
+
+    p {
+      font-size: 1.1em;
+      margin: 0.4em;
+    }
+
+    .dialog {
+      font-size: 1.3em;
+      margin: 1.5em 0;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1em;
+      border-radius: 12px;
+    }
+
+    button {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1em;
+      padding: 0.6em 1.4em;
+      margin: 0.5em;
+      border: none;
+      border-radius: 8px;
+      background-color: #ffcc66;
+      color: #3a250f;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #e6b354;
+      transform: scale(1.05);
+    }
+
+    #shopArea {
+      display: none;
+    }
+
+    .back-button {
+      margin-top: 2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍪 Cookie Shop</h1>
+
+  <p><strong>Cookies:</strong> <span id="cookieCount">0</span></p>
+  <p><strong>Money:</strong> $<span id="moneyDisplay">0</span></p>
+
+  <div id="shopArea">
+    <p class="dialog" id="buyerMessage"></p>
+    <button id="acceptButton" onclick="acceptOffer()">Accept</button>
+    <button id="declineButton" onclick="declineOffer()">Decline</button>
+  </div>
+
+  <div class="back-button">
+    <button onclick="location.href='index.html'">🔙 Back to HQ</button>
+  </div>
+
+  <script>
+    const names = [
+      "Alice", "Ben", "Carla", "Derek", "Ella", "Felix", "Grace", "Henry", "Isla", "Jack",
+      "Karen", "Leo", "Mila", "Noah", "Olive", "Peter", "Quinn", "Ruby", "Sam", "Tina",
+      "Uma", "Victor", "Wendy", "Xander", "Yara", "Zane", "Amy", "Brian", "Cindy", "Dave",
+      "Eva", "Finn", "Gina", "Harvey", "Ivy", "Jon", "Kira", "Liam", "Maya", "Nina",
+      "Owen", "Paula", "Quincy", "Rose", "Steve", "Tara", "Uri", "Violet", "Will", "Xia",
+      "Yosef", "Zoey", "Asher", "Bella", "Chloe", "Dean", "Elsa", "Freddy", "Gwen", "Hugo",
+      "Indie", "Jay", "Kylie", "Lola", "Max", "Nate", "Opal", "Penny", "Quora", "Ralph",
+      "Sara", "Theo", "Una", "Vince", "Willa", "Ximena", "Yuki", "Zara", "Alfie", "Brie",
+      "Cruz", "Dani", "Emmy", "Ford", "Gia", "Hans", "Izzy", "Jude", "Kat", "Lars",
+      "Moe", "Nico", "Ozzy", "Pia", "Quin", "Rhea", "Sky", "Toby", "Umi", "Vera"
+    ];
+
+    let money = parseFloat(localStorage.getItem("money")) || 0;
+    let cookies = parseInt(localStorage.getItem("cookies")) || 0;
+    let offerPrice = 0;
+    let customerName = "";
+    let offerVisible = false;
+    let initialWaitTime = Math.floor(Math.random() * 5) + 3;
+
+    function updateDisplay() {
+      document.getElementById("cookieCount").textContent = cookies;
+      document.getElementById("moneyDisplay").textContent = money.toFixed(2);
+    }
+
+    function newOffer() {
+      if (cookies < 1) {
+        document.getElementById("shopArea").style.display = "none";
+        return;
+      }
+
+      offerPrice = Math.floor(Math.random() * 21) + 10;
+      customerName = names[Math.floor(Math.random() * names.length)];
+      document.getElementById("buyerMessage").textContent = `${customerName} wants to buy a cookie for $${offerPrice}.`;
+      document.getElementById("shopArea").style.display = "block";
+
+      offerVisible = true;
+    }
+
+    function startCustomerTimer() {
+      const delayTime = Math.floor(Math.random() * 5) + 3;
+      setTimeout(() => {
+        if (offerVisible) {
+          document.getElementById("shopArea").style.display = "none";
+        }
+        newOffer();
+      }, delayTime * 1000);
+    }
+
+    function startInitialWait() {
+      setTimeout(() => {
+        startCustomerTimer();
+      }, initialWaitTime * 1000);
+    }
+
+    function acceptOffer() {
+      if (cookies > 0) {
+        cookies--;
+        money += offerPrice;
+        saveState();
+        updateDisplay();
+        offerVisible = false;
+        document.getElementById("shopArea").style.display = "none";
+        startCustomerTimer();
+      }
+    }
+
+    function declineOffer() {
+      offerVisible = false;
+      document.getElementById("shopArea").style.display = "none";
+      startCustomerTimer();
+    }
+
+    function saveState() {
+      localStorage.setItem("money", money);
+      localStorage.setItem("cookies", cookies);
+    }
+
+    updateDisplay();
+    startInitialWait();
+  </script>
+</body>
+</html>

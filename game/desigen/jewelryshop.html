@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>💍 Jewelry Shop</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #fff3f8;
+      padding: 2em;
+    }
+    .customer {
+      font-size: 1.2em;
+      margin-top: 2em;
+    }
+    button {
+      margin: 0.5em;
+      padding: 0.6em 1.2em;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>💍 Jewelry Shop</h1>
+  <div id="status">Waiting for customer...</div>
+  <div id="customer" class="customer" style="display:none">
+    <p><strong><span id="custName"></span></strong> says: <span id="custReason"></span></p>
+    <p>They want to buy a <span id="item"></span> for $<span id="offer"></span></p>
+    <button onclick="acceptOffer()">Accept</button>
+    <button onclick="declineOffer()">Decline</button>
+  </div>
+  <br>
+  <button onclick="location.href='index.html'">⬅️ Back to HQ</button>
+
+  <script>
+    const names = [
+      "Alice", "Bob", "Charlie", "Diana", "Ethan", "Fiona", "George", "Hannah", "Ian", "Jasmine",
+      "Kyle", "Luna", "Mike", "Nora", "Owen", "Paula", "Quinn", "Rachel", "Sam", "Tina",
+      "Umar", "Vera", "Will", "Xena", "Yara", "Zane", "Amber", "Brian", "Cleo", "Derek",
+      "Elsa", "Felix", "Gina", "Harry", "Isla", "Jack", "Kira", "Leo", "Mila", "Nash",
+      "Olive", "Peter", "Queenie", "Ron", "Sophie", "Tom", "Una", "Victor", "Wendy", "Xavier",
+      "Yasmine", "Zack", "Anya", "Ben", "Cora", "Dean", "Elle", "Finn", "Grace", "Hector",
+      "Ivy", "Jon", "Kylie", "Liam", "May", "Nico", "Opal", "Paul", "Rina", "Steve",
+      "Talia", "Uri", "Vince", "Willa", "Ximena", "Yuri", "Zelda", "Adam", "Bella", "Caleb",
+      "Daisy", "Emil", "Freya", "Gabe", "Hope", "Isaac", "Joan", "Kane", "Lily", "Mason",
+      "Nina", "Omar", "Penny", "Ray", "Sara", "Theo", "Ula", "Van", "Wes", "Yuki"
+    ];
+
+    const reasons = [
+      "It's a gift", "Looks cool", "Need it for a party", "Collecting", "Looks shiny",
+      "Want to impress", "Anniversary gift", "Just because", "Love jewelry", "To match my outfit",
+      "It reminds me of someone", "It's sentimental", "I love how it sparkles", "For my wedding", 
+      "It's a family heirloom", "I need it for my job", "It matches my shoes", "I’m treating myself", 
+      "It's the perfect accessory", "My friend has one", "I saw it in a magazine", "It's for a special event", 
+      "To add to my collection", "It was on sale", "For my birthday", "It’s a limited edition", 
+      "It looks luxurious", "For my anniversary", "Because I deserve it", "I need it for a photoshoot", 
+      "It makes me feel special", "For a milestone occasion", "I saw it online", "It complements my dress", 
+      "I’m feeling fancy today", "It goes with my new outfit", "I love the design", "It’s so unique", 
+      "It’s for my mom", "For my daughter", "To treat myself", "It’s a new trend", "To feel confident", 
+      "I need a new accessory", "For a special someone", "I always wanted one", "To celebrate an achievement", 
+      "Because it's a classic", "It looks elegant", "It’s my favorite color", "For my wedding anniversary", 
+      "It’s a surprise gift", "I need it for a holiday", "For my engagement", "It's part of my tradition", 
+      "It will be a great souvenir", "I want to match with a friend", "I love the craftsmanship", 
+      "It reminds me of a trip", "For a new beginning", "It makes me feel empowered", "I’m feeling generous", 
+      "To show my love", "It’s from my favorite designer", "I’m inspired by someone", "To brighten my day", 
+      "It’s a symbol of my success", "It’s a statement piece", "For a prom", "It’s a keepsake", 
+      "To celebrate a life milestone", "I want to be more fashionable", "I love the way it feels", 
+      "To support a small business", "It's a reminder of a great memory", "I need it for a costume", 
+      "It’s a gift for my best friend", "It’s perfect for a romantic gesture", "I want to feel elegant", 
+      "It’s for my wife", "For my girlfriend", "To match my jewelry set", "I’m inspired by a celebrity", 
+      "It’s a unique find", "I want to start a new collection", "It’s a gift for someone special", 
+      "Because it’s timeless", "I want to pass it down to someone", "It’s a must-have for the season", 
+      "It’s a great conversation starter", "I’m creating my own style", "It’s a family tradition", 
+      "I want to own something rare", "I want to share the love", "I want to express my personality", 
+      "It’s for a new chapter in my life", "It will make me happy", "I love how it feels on my skin", 
+      "It’s just what I’ve been looking for", "It matches my vibe", "I need it for my collection", 
+      "I feel like treating myself", "It’s part of my personal journey", "It’s for a special celebration", 
+      "It’s part of my style evolution", "It’s a gift for my sister", "To express myself in a new way", 
+      "I want to wear something different", "It’s a gift to myself for a personal milestone", "I’m starting a new hobby", 
+      "It’s just perfect for my occasion"
+    ];
+
+    const items = [
+      { key: 'silverRings', name: 'Silver Ring', cost: 400 * 2 },
+      { key: 'diamondRings', name: 'Diamond Ring', cost: 1000 },
+      { key: 'silverNecklaces', name: 'Silver Necklace', cost: 400 * 6 },
+      { key: 'diamondNecklaces', name: 'Diamond Necklace', cost: 1000 * 3 },
+      { key: 'goldRings', name: 'Gold Ring', cost: 650 },
+      { key: 'goldNecklaces', name: 'Gold Necklace', cost: 650 * 3 },
+    ];
+
+    let inventory = {
+      silverRings: parseInt(localStorage.getItem('silverRings')) || 0,
+      diamondRings: parseInt(localStorage.getItem('diamondRings')) || 0,
+      silverNecklaces: parseInt(localStorage.getItem('silverNecklaces')) || 0,
+      diamondNecklaces: parseInt(localStorage.getItem('diamondNecklaces')) || 0,
+      goldRings: parseInt(localStorage.getItem('goldRings')) || 0,
+      goldNecklaces: parseInt(localStorage.getItem('goldNecklaces')) || 0,
+    };
+    let money = parseFloat(localStorage.getItem('money')) || 0;
+
+    let currentItem = null;
+    let currentOffer = 0;
+
+    function waitForCustomer() {
+      document.getElementById('status').innerText = 'Waiting for customer...';
+      document.getElementById('customer').style.display = 'none';
+      const delay = Math.random() * 4000 + 3000;
+      setTimeout(generateCustomer, delay);
+    }
+
+    function generateCustomer() {
+      const possibleItems = items.filter(i => inventory[i.key] > 0);
+      if (possibleItems.length === 0) {
+        document.getElementById('status').innerText = 'No items to sell...';
+        setTimeout(waitForCustomer, 5000);
+        return;
+      }
+
+      currentItem = possibleItems[Math.floor(Math.random() * possibleItems.length)];
+      currentOffer = Math.floor(currentItem.cost * (1 + Math.random()));
+
+      document.getElementById('custName').innerText = names[Math.floor(Math.random() * names.length)];
+      document.getElementById('custReason').innerText = reasons[Math.floor(Math.random() * reasons.length)];
+      document.getElementById('item').innerText = currentItem.name;
+      document.getElementById('offer').innerText = currentOffer;
+
+      document.getElementById('status').innerText = '';
+      document.getElementById('customer').style.display = 'block';
+    }
+
+    function acceptOffer() {
+      inventory[currentItem.key]--;
+      money += currentOffer;
+      localStorage.setItem('money', money);
+      localStorage.setItem(currentItem.key, inventory[currentItem.key]);
+      waitForCustomer();
+    }
+
+    function declineOffer() {
+      waitForCustomer();
+    }
+
+    waitForCustomer();
+  </script>
+</body>
+</html>

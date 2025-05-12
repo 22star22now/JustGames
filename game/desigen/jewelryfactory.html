@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>💎 Jewelry Factory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #ffffff;
+      text-align: center;
+      padding: 3em 1em;
+    }
+
+    h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 2em;
+      margin-bottom: 1em;
+      color: #ffcc00;
+      text-shadow: 2px 2px #000;
+    }
+
+    .info {
+      margin-bottom: 2em;
+      font-size: 1.5em;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 1em;
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    .info span {
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffcc;
+    }
+
+    button {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1em;
+      padding: 1em 2em;
+      margin: 0.5em;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background: #ffcc00;
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      background: #ffaa00;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <h1>💎 Jewelry Factory</h1>
+
+  <div class="info">
+    <p><strong>Money:</strong> $<span id="money">0</span></p>
+    <p><strong>Silver:</strong> <span id="silver">0</span> | <strong>Gold:</strong> <span id="gold">0</span> | <strong>Diamond:</strong> <span id="diamond">0</span></p>
+    <p><strong>Storage:</strong></p>
+    <p>Silver Rings: <span id="silverRings">0</span></p>
+    <p>Diamond Rings: <span id="diamondRings">0</span></p>
+    <p>Silver Necklaces: <span id="silverNecklaces">0</span></p>
+    <p>Diamond Necklaces: <span id="diamondNecklaces">0</span></p>
+    <p>Gold Rings: <span id="goldRings">0</span></p>
+    <p>Gold Necklaces: <span id="goldNecklaces">0</span></p>
+  </div>
+
+  <h2>Buy Materials</h2>
+  <button onclick="buyMaterial('silver')">Buy Silver ($200)</button>
+  <button onclick="buyMaterial('gold')">Buy Gold ($650)</button>
+  <button onclick="buyMaterial('diamond')">Buy Diamond ($1000)</button>
+
+  <h2>Create Jewelry</h2>
+  <button onclick="createJewelry('silver_ring')">Make Silver Ring (2 Silver)</button>
+  <button onclick="createJewelry('diamond_ring')">Make Diamond Ring (1 Diamond)</button>
+  <button onclick="createJewelry('silver_necklace')">Make Silver Necklace (6 Silver)</button>
+  <button onclick="createJewelry('diamond_necklace')">Make Diamond Necklace (3 Diamond)</button>
+  <button onclick="createJewelry('gold_ring')">Make Gold Ring (1 Gold)</button>
+  <button onclick="createJewelry('gold_necklace')">Make Gold Necklace (3 Gold)</button>
+
+  <br><br>
+  <button onclick="location.href='index.html'">⬅️ Back to HQ</button>
+
+  <script>
+    let money = parseFloat(localStorage.getItem('money')) || 0;
+    let silver = parseInt(localStorage.getItem('silver')) || 0;
+    let gold = parseInt(localStorage.getItem('gold')) || 0;
+    let diamond = parseInt(localStorage.getItem('diamond')) || 0;
+
+    let silverRings = parseInt(localStorage.getItem('silverRings')) || 0;
+    let diamondRings = parseInt(localStorage.getItem('diamondRings')) || 0;
+    let silverNecklaces = parseInt(localStorage.getItem('silverNecklaces')) || 0;
+    let diamondNecklaces = parseInt(localStorage.getItem('diamondNecklaces')) || 0;
+    let goldRings = parseInt(localStorage.getItem('goldRings')) || 0;
+    let goldNecklaces = parseInt(localStorage.getItem('goldNecklaces')) || 0;
+
+    function updateDisplay() {
+      document.getElementById('money').textContent = money.toFixed(2);
+      document.getElementById('silver').textContent = silver;
+      document.getElementById('gold').textContent = gold;
+      document.getElementById('diamond').textContent = diamond;
+
+      document.getElementById('silverRings').textContent = silverRings;
+      document.getElementById('diamondRings').textContent = diamondRings;
+      document.getElementById('silverNecklaces').textContent = silverNecklaces;
+      document.getElementById('diamondNecklaces').textContent = diamondNecklaces;
+      document.getElementById('goldRings').textContent = goldRings;
+      document.getElementById('goldNecklaces').textContent = goldNecklaces;
+    }
+
+    function buyMaterial(material) {
+      let cost = 0;
+      switch (material) {
+        case 'silver': cost = 200; break;
+        case 'gold': cost = 650; break;
+        case 'diamond': cost = 1000; break;
+      }
+      if (money >= cost) {
+        money -= cost;
+        if (material === 'silver') silver++;
+        else if (material === 'gold') gold++;
+        else if (material === 'diamond') diamond++;
+        save();
+        updateDisplay();
+      }
+    }
+
+    function createJewelry(type) {
+      switch (type) {
+        case 'silver_ring':
+          if (silver >= 2) {
+            silver -= 2;
+            silverRings++;
+          }
+          break;
+        case 'diamond_ring':
+          if (diamond >= 1) {
+            diamond -= 1;
+            diamondRings++;
+          }
+          break;
+        case 'silver_necklace':
+          if (silver >= 6) {
+            silver -= 6;
+            silverNecklaces++;
+          }
+          break;
+        case 'diamond_necklace':
+          if (diamond >= 3) {
+            diamond -= 3;
+            diamondNecklaces++;
+          }
+          break;
+        case 'gold_ring':
+          if (gold >= 1) {
+            gold -= 1;
+            goldRings++;
+          }
+          break;
+        case 'gold_necklace':
+          if (gold >= 3) {
+            gold -= 3;
+            goldNecklaces++;
+          }
+          break;
+      }
+      updateDisplay();
+      save();
+    }
+
+    function save() {
+      localStorage.setItem('money', money);
+      localStorage.setItem('silver', silver);
+      localStorage.setItem('gold', gold);
+      localStorage.setItem('diamond', diamond);
+
+      localStorage.setItem('silverRings', silverRings);
+      localStorage.setItem('diamondRings', diamondRings);
+      localStorage.setItem('silverNecklaces', silverNecklaces);
+      localStorage.setItem('diamondNecklaces', diamondNecklaces);
+      localStorage.setItem('goldRings', goldRings);
+      localStorage.setItem('goldNecklaces', goldNecklaces);
+    }
+
+    updateDisplay();
+  </script>
+</body>
+</html>
