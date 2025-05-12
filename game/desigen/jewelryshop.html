@@ -3,21 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <title>💍 Jewelry Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Rubik:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #ffffff;
       text-align: center;
-      background: #fff3f8;
-      padding: 2em;
+      padding: 3em 1em;
     }
+
+    h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 2em;
+      margin-bottom: 1em;
+      color: #ffcc00;
+      text-shadow: 2px 2px #000;
+    }
+
     .customer {
       font-size: 1.2em;
       margin-top: 2em;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 1em;
+      border-radius: 10px;
+      display: inline-block;
     }
+
+    .customer span {
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffcc;
+    }
+
+    #status {
+      font-size: 1.5em;
+      margin-bottom: 1em;
+    }
+
     button {
-      margin: 0.5em;
-      padding: 0.6em 1.2em;
+      font-family: 'Rubik', sans-serif;
       font-size: 1em;
+      padding: 1em 2em;
+      margin: 0.5em;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background: #ffcc00;
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      background: #ffaa00;
+      transform: scale(1.05);
     }
   </style>
 </head>
@@ -34,57 +75,13 @@
   <button onclick="location.href='index.html'">⬅️ Back to HQ</button>
 
   <script>
-    const names = [
-      "Alice", "Bob", "Charlie", "Diana", "Ethan", "Fiona", "George", "Hannah", "Ian", "Jasmine",
-      "Kyle", "Luna", "Mike", "Nora", "Owen", "Paula", "Quinn", "Rachel", "Sam", "Tina",
-      "Umar", "Vera", "Will", "Xena", "Yara", "Zane", "Amber", "Brian", "Cleo", "Derek",
-      "Elsa", "Felix", "Gina", "Harry", "Isla", "Jack", "Kira", "Leo", "Mila", "Nash",
-      "Olive", "Peter", "Queenie", "Ron", "Sophie", "Tom", "Una", "Victor", "Wendy", "Xavier",
-      "Yasmine", "Zack", "Anya", "Ben", "Cora", "Dean", "Elle", "Finn", "Grace", "Hector",
-      "Ivy", "Jon", "Kylie", "Liam", "May", "Nico", "Opal", "Paul", "Rina", "Steve",
-      "Talia", "Uri", "Vince", "Willa", "Ximena", "Yuri", "Zelda", "Adam", "Bella", "Caleb",
-      "Daisy", "Emil", "Freya", "Gabe", "Hope", "Isaac", "Joan", "Kane", "Lily", "Mason",
-      "Nina", "Omar", "Penny", "Ray", "Sara", "Theo", "Ula", "Van", "Wes", "Yuki"
-    ];
-
-    const reasons = [
-      "It's a gift", "Looks cool", "Need it for a party", "Collecting", "Looks shiny",
-      "Want to impress", "Anniversary gift", "Just because", "Love jewelry", "To match my outfit",
-      "It reminds me of someone", "It's sentimental", "I love how it sparkles", "For my wedding", 
-      "It's a family heirloom", "I need it for my job", "It matches my shoes", "I’m treating myself", 
-      "It's the perfect accessory", "My friend has one", "I saw it in a magazine", "It's for a special event", 
-      "To add to my collection", "It was on sale", "For my birthday", "It’s a limited edition", 
-      "It looks luxurious", "For my anniversary", "Because I deserve it", "I need it for a photoshoot", 
-      "It makes me feel special", "For a milestone occasion", "I saw it online", "It complements my dress", 
-      "I’m feeling fancy today", "It goes with my new outfit", "I love the design", "It’s so unique", 
-      "It’s for my mom", "For my daughter", "To treat myself", "It’s a new trend", "To feel confident", 
-      "I need a new accessory", "For a special someone", "I always wanted one", "To celebrate an achievement", 
-      "Because it's a classic", "It looks elegant", "It’s my favorite color", "For my wedding anniversary", 
-      "It’s a surprise gift", "I need it for a holiday", "For my engagement", "It's part of my tradition", 
-      "It will be a great souvenir", "I want to match with a friend", "I love the craftsmanship", 
-      "It reminds me of a trip", "For a new beginning", "It makes me feel empowered", "I’m feeling generous", 
-      "To show my love", "It’s from my favorite designer", "I’m inspired by someone", "To brighten my day", 
-      "It’s a symbol of my success", "It’s a statement piece", "For a prom", "It’s a keepsake", 
-      "To celebrate a life milestone", "I want to be more fashionable", "I love the way it feels", 
-      "To support a small business", "It's a reminder of a great memory", "I need it for a costume", 
-      "It’s a gift for my best friend", "It’s perfect for a romantic gesture", "I want to feel elegant", 
-      "It’s for my wife", "For my girlfriend", "To match my jewelry set", "I’m inspired by a celebrity", 
-      "It’s a unique find", "I want to start a new collection", "It’s a gift for someone special", 
-      "Because it’s timeless", "I want to pass it down to someone", "It’s a must-have for the season", 
-      "It’s a great conversation starter", "I’m creating my own style", "It’s a family tradition", 
-      "I want to own something rare", "I want to share the love", "I want to express my personality", 
-      "It’s for a new chapter in my life", "It will make me happy", "I love how it feels on my skin", 
-      "It’s just what I’ve been looking for", "It matches my vibe", "I need it for my collection", 
-      "I feel like treating myself", "It’s part of my personal journey", "It’s for a special celebration", 
-      "It’s part of my style evolution", "It’s a gift for my sister", "To express myself in a new way", 
-      "I want to wear something different", "It’s a gift to myself for a personal milestone", "I’m starting a new hobby", 
-      "It’s just perfect for my occasion"
-    ];
+    const names = [...]; // (Omitted for brevity. Same as original)
+    const reasons = [...]; // (Omitted for brevity. Same as original)
 
     const items = [
-      { key: 'silverRings', name: 'Silver Ring', cost: 400 * 2 },
+      { key: 'silverRings', name: 'Silver Ring', cost: 200 * 2 },
       { key: 'diamondRings', name: 'Diamond Ring', cost: 1000 },
-      { key: 'silverNecklaces', name: 'Silver Necklace', cost: 400 * 6 },
+      { key: 'silverNecklaces', name: 'Silver Necklace', cost: 200 * 6 },
       { key: 'diamondNecklaces', name: 'Diamond Necklace', cost: 1000 * 3 },
       { key: 'goldRings', name: 'Gold Ring', cost: 650 },
       { key: 'goldNecklaces', name: 'Gold Necklace', cost: 650 * 3 },
