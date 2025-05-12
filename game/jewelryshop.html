@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>💍 Jewelry Shop</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #fff3f8;
+      padding: 2em;
+    }
+    .customer {
+      font-size: 1.2em;
+      margin-top: 2em;
+    }
+    button {
+      margin: 0.5em;
+      padding: 0.6em 1.2em;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>💍 Jewelry Shop</h1>
+  <div id="status">Waiting for customer...</div>
+  <div id="customer" class="customer" style="display:none">
+    <p><strong><span id="custName"></span></strong> says: <span id="custReason"></span></p>
+    <p>They want to buy a <span id="item"></span> for $<span id="offer"></span></p>
+    <button onclick="acceptOffer()">Accept</button>
+    <button onclick="declineOffer()">Decline</button>
+  </div>
+  <br>
+  <button onclick="location.href='index.html'">⬅️ Back to HQ</button>
+
+  <script>
+    const names = [
+      "Alice", "Bob", "Charlie", "Diana", "Ethan", "Fiona", "George", "Hannah", "Ian", "Jasmine",
+      "Kyle", "Luna", "Mike", "Nora", "Owen", "Paula", "Quinn", "Rachel", "Sam", "Tina",
+      "Umar", "Vera", "Will", "Xena", "Yara", "Zane", "Amber", "Brian", "Cleo", "Derek",
+      "Elsa", "Felix", "Gina", "Harry", "Isla", "Jack", "Kira", "Leo", "Mila", "Nash",
+      "Olive", "Peter", "Queenie", "Ron", "Sophie", "Tom", "Una", "Victor", "Wendy", "Xavier",
+      "Yasmine", "Zack", "Anya", "Ben", "Cora", "Dean", "Elle", "Finn", "Grace", "Hector",
+      "Ivy", "Jon", "Kylie", "Liam", "May", "Nico", "Opal", "Paul", "Rina", "Steve",
+      "Talia", "Uri", "Vince", "Willa", "Ximena", "Yuri", "Zelda", "Adam", "Bella", "Caleb",
+      "Daisy", "Emil", "Freya", "Gabe", "Hope", "Isaac", "Joan", "Kane", "Lily", "Mason",
+      "Nina", "Omar", "Penny", "Ray", "Sara", "Theo", "Ula", "Van", "Wes", "Yuki"
+    ];
+
+    const reasons = [
+      "It's a gift", "Looks cool", "Need it for a party", "Collecting", "Looks shiny",
+      "Want to impress", "Anniversary gift", "Just because", "Love jewelry", "To match my outfit",
+      ...Array(90).fill(0).map((_, i) => `Reason ${i + 11}`)
+    ];
+
+    const items = [
+      { key: 'silverRings', name: 'Silver Ring', cost: 400 * 2 },
+      { key: 'diamondRings', name: 'Diamond Ring', cost: 1000 },
+      { key: 'silverNecklaces', name: 'Silver Necklace', cost: 400 * 6 },
+      { key: 'diamondNecklaces', name: 'Diamond Necklace', cost: 1000 * 3 },
+      { key: 'goldRings', name: 'Gold Ring', cost: 650 },
+      { key: 'goldNecklaces', name: 'Gold Necklace', cost: 650 * 3 },
+    ];
+
+    let inventory = {
+      silverRings: parseInt(localStorage.getItem('silverRings')) || 0,
+      diamondRings: parseInt(localStorage.getItem('diamondRings')) || 0,
+      silverNecklaces: parseInt(localStorage.getItem('silverNecklaces')) || 0,
+      diamondNecklaces: parseInt(localStorage.getItem('diamondNecklaces')) || 0,
+      goldRings: parseInt(localStorage.getItem('goldRings')) || 0,
+      goldNecklaces: parseInt(localStorage.getItem('goldNecklaces')) || 0,
+    };
+    let money = parseFloat(localStorage.getItem('money')) || 0;
+
+    let currentItem = null;
+    let currentOffer = 0;
+
+    function waitForCustomer() {
+      document.getElementById('status').innerText = 'Waiting for customer...';
+      document.getElementById('customer').style.display = 'none';
+      const delay = Math.random() * 4000 + 3000;
+      setTimeout(generateCustomer, delay);
+    }
+
+    function generateCustomer() {
+      const possibleItems = items.filter(i => inventory[i.key] > 0);
+      if (possibleItems.length === 0) {
+        document.getElementById('status').innerText = 'No items to sell...';
+        setTimeout(waitForCustomer, 5000);
+        return;
+      }
+
+      currentItem = possibleItems[Math.floor(Math.random() * possibleItems.length)];
+      currentOffer = Math.floor(currentItem.cost * (1 + Math.random()));
+
+      document.getElementById('custName').innerText = names[Math.floor(Math.random() * names.length)];
+      document.getElementById('custReason').innerText = reasons[Math.floor(Math.random() * reasons.length)];
+      document.getElementById('item').innerText = currentItem.name;
+      document.getElementById('offer').innerText = currentOffer;
+
+      document.getElementById('status').innerText = '';
+      document.getElementById('customer').style.display = 'block';
+    }
+
+    function acceptOffer() {
+      inventory[currentItem.key]--;
+      money += currentOffer;
+      localStorage.setItem('money', money);
+      localStorage.setItem(currentItem.key, inventory[currentItem.key]);
+      waitForCustomer();
+    }
+
+    function declineOffer() {
+      waitForCustomer();
+    }
+
+    waitForCustomer();
+  </script>
+</body>
+</html>
