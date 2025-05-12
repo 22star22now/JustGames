@@ -1,1 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>💍 Jewelry Shop</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #fff3f8;
+      padding: 2em;
+    }
+    .customer {
+      font-size: 1.2em;
+      margin-top: 2em;
+    }
+    button {
+      margin: 0.5em;
+      padding: 0.6em 1.2em;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>💍 Jewelry Shop</h1>
+  <div id="status">Waiting for customer...</div>
+  <div id="customer" class="customer" style="display:none">
+    <p><strong><span id="custName"></span></strong> says: <span id="custReason"></span></p>
+    <p>They want to buy a <span id="item"></span> for $<span id="offer"></span></p>
+    <button onclick="acceptOffer()">Accept</button>
+    <button onclick="declineOffer()">Decline</button>
+  </div>
+  <br>
+  <button onclick="location.href='index.html'">⬅️ Back to HQ</button>
+
+  <script>
+    const names = [
+      "Alice", "Bob", "Charlie", "Diana", "Ethan", "Fiona", "George", "Hannah", "Ian", "Jasmine",
+      "Kyle", "Luna", "Mike", "Nora", "Owen", "Paula", "Quinn", "Rachel", "Sam", "Tina",
+      "Umar", "Vera", "Will", "Xena", "Yara", "Zane", "Amber", "Brian", "Cleo", "Derek",
+      "Elsa", "Felix", "Gina", "Harry", "Isla", "Jack", "Kira", "Leo", "Mila", "Nash",
+      "Olive", "Peter", "Queenie", "Ron", "Sophie", "Tom", "Una", "Victor", "Wendy", "Xavier",
+      "Yasmine", "Zack", "Anya", "Ben", "Cora", "Dean", "Elle", "Finn", "Grace", "Hector",
+      "Ivy", "Jon", "Kylie", "Liam", "May", "Nico", "Opal", "Paul", "Rina", "Steve",
+      "Talia", "Uri", "Vince", "Willa", "Ximena", "Yuri", "Zelda", "Adam", "Bella", "Caleb",
+      "Daisy", "Emil", "Freya", "Gabe", "Hope", "Isaac", "Joan", "Kane", "Lily", "Mason",
+      "Nina", "Omar", "Penny", "Ray", "Sara", "Theo", "Ula", "Van", "Wes", "Yuki"
+    ];
+
+    const reasons = [
+      "It's a gift", "Looks cool", "Need it for a party", "Collecting", "Looks shiny",
+      "Want to impress", "Anniversary gift", "Just because", "Love jewelry", "To match my outfit",
+      "Birthday coming up", "Big date tonight", "Feeling fancy", "For good luck", "To celebrate",
+      "Part of a costume", "It’s beautiful", "Want to treat myself", "Saw it in a dream", "For my mom",
+      "Engagement ring", "Prom night", "Saw it on sale", "My friend has one", "Want to shine",
+      "My sibling’s wedding", "Special occasion", "It’s my style", "It sparkles", "Heard it's rare",
+      "Felt like shopping", "Fits my vibe", "Matches my shoes", "Need a makeover", "Why not?",
+      "New year gift", "Won a bet", "Fashion show", "Fits my aesthetic", "To donate later",
+      "Need for photo shoot", "Part of collection", "To show success", "Good investment", "For a bet",
+      "Celebrating promotion", "For graduation", "To feel rich", "TV show inspired me", "For cosplay",
+      "Found extra money", "I like the shape", "For a dance", "Valentine's Day", "To look elegant",
+      "Love the design", "To make someone jealous", "Because it's shiny", "Rewarding myself",
+      "Shopping spree", "Bored", "Need something new", "Feels lucky", "To frame it", "Inspired by a movie",
+      "To pass down", "Family tradition", "To impress coworkers", "Wanted a ring", "Felt magical",
+      "New start", "Bridal gift", "My horoscope said so", "To feel confident", "Celebrating success",
+      "Friend dared me", "Color matches my hair", "Need something expensive", "It’s trending",
+      "Limited edition", "Heard it's magical", "To replace old jewelry", "Need a charm", "For style points",
+      "Looks vintage", "Saw a celebrity wear it", "Mystical vibes", "Part of a ritual", "I’m in love",
+      "To propose", "Matches my tattoo", "For a social event", "Celebration piece", "Collector’s item"
+    ];
+
+    const items = [
+      { key: 'silverRings', name: 'Silver Ring', cost: 200 * 2 },
+      { key: 'diamondRings', name: 'Diamond Ring', cost: 1000 },
+      { key: 'silverNecklaces', name: 'Silver Necklace', cost: 200 * 6 },
+      { key: 'diamondNecklaces', name: 'Diamond Necklace', cost: 1000 * 3 },
+      { key: 'goldRings', name: 'Gold Ring', cost: 650 },
+      { key: 'goldNecklaces', name: 'Gold Necklace', cost: 650 * 3 },
+    ];
+
+    let inventory = {
+      silverRings: parseInt(localStorage.getItem('silverRings')) || 0,
+      diamondRings: parseInt(localStorage.getItem('diamondRings')) || 0,
+      silverNecklaces: parseInt(localStorage.getItem('silverNecklaces')) || 0,
+      diamondNecklaces: parseInt(localStorage.getItem('diamondNecklaces')) || 0,
+      goldRings: parseInt(localStorage.getItem('goldRings')) || 0,
+      goldNecklaces: parseInt(localStorage.getItem('goldNecklaces')) || 0,
+    };
+    let money = parseFloat(localStorage.getItem('money')) || 0;
+
+    let currentItem = null;
+    let currentOffer = 0;
+
+    function waitForCustomer() {
+      document.getElementById('status').innerText = 'Waiting for customer...';
+      document.getElementById('customer').style.display = 'none';
+      const delay = Math.random() * 4000 + 3000;
+      setTimeout(generateCustomer, delay);
+    }
+
+    function generateCustomer() {
+      const possibleItems = items.filter(i => inventory[i.key] > 0);
+      if (possibleItems.length === 0) {
+        document.getElementById('status').innerText = 'No items to sell...';
+        setTimeout(waitForCustomer, 5000);
+        return;
+      }
+
+      currentItem = possibleItems[Math.floor(Math.random() * possibleItems.length)];
+      currentOffer = Math.floor(currentItem.cost * (1 + Math.random()));
+
+      document.getElementById('custName').innerText = names[Math.floor(Math.random() * names.length)];
+      document.getElementById('custReason').innerText = reasons[Math.floor(Math.random() * reasons.length)];
+      document.getElementById('item').innerText = currentItem.name;
+      document.getElementById('offer').innerText = currentOffer;
+
+      document.getElementById('status').innerText = '';
+      document.getElementById('customer').style.display = 'block';
+    }
+
+    function acceptOffer() {
+      inventory[currentItem.key]--;
+      money += currentOffer;
+      localStorage.setItem('money', money);
+      localStorage.setItem(currentItem.key, inventory[currentItem.key]);
+      waitForCustomer();
+    }
+
+    function declineOffer() {
+      waitForCustomer();
+    }
+
+    waitForCustomer();
+  </script>
+</body>
+</html>
 
