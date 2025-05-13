@@ -87,8 +87,8 @@
       goldRings: parseInt(localStorage.getItem('goldRings')) || 0,
       goldNecklaces: parseInt(localStorage.getItem('goldNecklaces')) || 0,
     };
-    let money = parseFloat(localStorage.getItem('money')) || 0;
 
+    let money = parseFloat(localStorage.getItem('money')) || 0;
     let currentItem = null;
     let currentOffer = 0;
 
@@ -124,6 +124,13 @@
       money += currentOffer;
       localStorage.setItem('money', money);
       localStorage.setItem(currentItem.key, inventory[currentItem.key]);
+
+      // Achievement check: Diamond Ring for exactly $1013
+      if (currentItem.key === 'diamondRings' && currentOffer === 1013 && !localStorage.getItem('diamond1013')) {
+        alert("🏆 Achievement Unlocked: Sold a Diamond Ring for exactly $1013!");
+        localStorage.setItem('diamond1013', 'true');
+      }
+
       waitForCustomer();
     }
 
@@ -135,4 +142,3 @@
   </script>
 </body>
 </html>
-
