@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🏆 Achievements</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+      padding: 2em;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    .achievement {
+      margin: 1em auto;
+      padding: 1em;
+      background: #fff;
+      max-width: 500px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-size: 1.2em;
+    }
+    .unlocked {
+      background-color: #d4edda;
+      border-left: 5px solid #28a745;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏆 Achievements</h1>
+
+  <div id="diamondRingAchievement" class="achievement">💎 Gained a cookie!! — Sell a diamond ring for exactly $1013</div>
+  <div id="cookieTycoonAchievement" class="achievement">🍪 Cookie Tycoon — Sell 1000 cookies</div>
+
+  <script>
+    if (localStorage.getItem("achievement_diamondRing") === "unlocked") {
+      document.getElementById("diamondRingAchievement").classList.add("unlocked");
+    }
+    if (parseInt(localStorage.getItem("cookiesSold")) >= 1000) {
+      document.getElementById("cookieTycoonAchievement").classList.add("unlocked");
+    }
+  </script>
+
+  <button onclick="location.href='index.html'">🔙 Back to HQ</button>
+</body>
+</html>
